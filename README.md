@@ -1,5 +1,1 @@
-# toDoGoReact
-# toDoGoReact
-# toDoGoReact
-# toDoGoReact
-# todo_go_react
+build a todo app with golang, gorm, postgres and react
