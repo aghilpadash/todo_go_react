@@ -40,3 +40,26 @@ func CreateTodo(c *fiber.Ctx) error {
 	}
 	return c.JSON(&todo)
 }
+
+func UpdateTodo(c *fiber.Ctx) error {
+	type UpdateTodo struct {
+		Title     string `json:"title"`
+		Completed bool   `json:"completed"`
+	}
+	id := c.Params("id")
+	db := database.DBConn
+	var todo Todo
+	err := db.Find(&todo, id).Error
+	if err != nil {
+		return c.Status(404).JSON(fiber.Map{"status": "error", "message": "تسکی پیدا نشد ! ", "data": err})
+	}
+	var updateTodo UpdateTodo
+	err = c.BodyParser(&updateTodo)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "تسک ورودی رو چک کن", "data": err})
+	}
+	todo.Title = updateTodo.Title
+	todo.Completed = updateTodo.Completed
+	db.Save(&todo)
+	return c.JSON(&todo)
+}
