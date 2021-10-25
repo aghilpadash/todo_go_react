@@ -33,6 +33,7 @@ func main() {
 	app := fiber.New()
 	initDatabase()
 	app.Get("/", helloAghil)
+	app.Get("todos/:id", models.GetTodosById)
 	setupRoutes(app)
 	app.Listen(":8000")
 }
