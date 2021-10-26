@@ -63,3 +63,14 @@ func UpdateTodo(c *fiber.Ctx) error {
 	db.Save(&todo)
 	return c.JSON(&todo)
 }
+func DeleteTodo(c *fiber.Ctx) error {
+	id := c.Params("id")
+	db := database.DBConn
+	var todo Todo
+	err := db.Find(&todo, id).Error
+	if err != nil {
+		return c.Status(404).JSON(fiber.Map{"status": "error", "message": "تسکی پیدا نشد ! ", "data": err})
+	}
+	db.Delete(&todo)
+	return c.SendStatus(200)
+}

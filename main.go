@@ -5,6 +5,7 @@ import (
 	"aghilpadash/toDoGo/models"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -27,14 +28,16 @@ func initDatabase() {
 }
 func setupRoutes(app *fiber.App) {
 	app.Get("/todos", models.GetTodos)
+	app.Get("todos/:id", models.GetTodosById)
 	app.Post("/todos", models.CreateTodo)
+	app.Put("/todos/:id", models.UpdateTodo)
+	app.Delete("/todos/:id", models.DeleteTodo)
 }
 func main() {
 	app := fiber.New()
-	initDatabase()
+	app.Use(cors.New())
 	app.Get("/", helloAghil)
-	app.Get("todos/:id", models.GetTodosById)
-	app.Put("/todos/:id", models.UpdateTodo)
+	initDatabase()
 	setupRoutes(app)
 	app.Listen(":8000")
 }
